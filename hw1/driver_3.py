@@ -10,10 +10,22 @@ class
 '''
 
 class Movement:
+
+    """
+    Movement class to generate valid board states by moving the blank tile.
+
+    Attributes:
+        board (Node): The current board node
+    
+    Methods:
+        moveUp(): Move blank tile up and return new board node
+        moveDown(): Move blank tile down and return new board node  
+        moveLeft(): Move blank tile left and return new board node
+        moveRight(): Move blank tile right and return new board node
+    """
+
     def __init__(self, board):
         self.board = board
-        
-
     
     def moveUp(self):
         copy_board = self.board.state[:]
@@ -56,6 +68,28 @@ class Movement:
 
 
 class Frontier:
+ 
+    """
+    Frontier class to manage nodes for search
+
+    Attributes:
+        myque (deque): Queue to hold nodes for breadth-first search
+        visited (set): Set to track visited nodes
+
+    Methods:
+        pop(): Remove and return node from queue
+        push(): Add node to end of queue
+        enqueue(): Add node to end of queue (alias for push)
+        dequeue(): Remove and return node from front of queue 
+        search(): Check if node is in visited set
+        size(): Get number of nodes in visited set
+    """
+    
+    def __init__(self):
+        self.myque = deque()
+        self.visited = set()
+
+    # Method definitions
     def __init__(self):
         self.myque = deque()
         self.visited = set()
@@ -93,6 +127,15 @@ class Frontier:
     
 
 class Node:
+    """
+    Node class to represent board states in search tree.
+    
+    Attributes:
+        state (list): The board configuration 
+        parent (Node): The parent node in the search tree
+        action (str): The action taken to reach this node
+        depth (int): The depth of this node in the search tree
+    """
     def __init__(self, state, parent, action, depth):
         self.path_cost = 0
         self.state = state
@@ -216,7 +259,7 @@ def get_child(node):
 
 
 def outputanswer(path, nodes_Expanded, node, max_Depth, diff, ram):
-    file = open("output_mine.txt", "w")
+    file = open("output.txt", "w")
     
     file.write("path_to_goal: {} \n".format(str(path)))
     file.write("cost_of_path: {} \n".format(str(len(path))))
