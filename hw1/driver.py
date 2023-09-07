@@ -190,6 +190,8 @@ def solverBFS(board):
         else:
             children = getChildren(node)
             for child in children:
+   
+
                 if (ExploredBFS.search(child)==False and FrontierBFS.search(child)==False):
                     FrontierBFS.enqueue(child)
 

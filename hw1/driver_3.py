@@ -82,7 +82,7 @@ class Frontier:
     def search(self, node):
         flag = False
         
-        if node in self.visited:
+        if str(node.state) in self.visited:
             flag = True
             
         return flag
@@ -128,7 +128,7 @@ def bfs(board):
     while frontier_BFS.size() != 0:
         
         node = frontier_BFS.dequeue()
-        explored.add(node)
+        explored.add(str(node.state))
         counter += 1
 
         if node.state == target:
@@ -155,9 +155,10 @@ def bfs(board):
             child = get_child(node)
 
             for v in child:
-                
-                if (v not in explored) and (frontier_BFS.search(v) == False):
-                    maxDepth = max(maxDepth, v.depth)
+
+                maxDepth = max(maxDepth, v.depth)
+                if (str(v.state) not in explored) and (frontier_BFS.search(v) == False):
+                   
                     frontier_BFS.enqueue(v)
 
 
@@ -168,8 +169,8 @@ def bfs(board):
     end = time.time()
     diff = end - begin
     ram = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-    outputanswer(path, counter, endNode, maxDepth,diff,ram)
-
+    outputanswer(path, counter, endNode, maxDepth, diff, ram)
+    
 def dfs(board):
     pass
 
@@ -178,7 +179,7 @@ def astar(board):
     pass
 
 def get_child(node):
-    tile = node.state.index(0)
+    tile = node.state[:].index(0)
     
     movement = Movement(node)
 
@@ -186,16 +187,16 @@ def get_child(node):
         return [movement.moveDown(), movement.moveRight()]
 
     elif tile == 1:
-        return [movement.moveLeft(), movement.moveDown(), movement.moveRight()]
+        return [movement.moveDown(), movement.moveLeft(), movement.moveRight()]
 
     elif tile == 2:
-        return [movement.moveLeft(), movement.moveDown()]
+        return [movement.moveDown(), movement.moveLeft()]
 
     elif tile == 3:
          return [movement.moveUp(), movement.moveDown(), movement.moveRight()]
 
     elif tile == 4:
-        return [movement.moveUp(), movement.moveDown(), movement.moveRight(), movement.moveLeft()]
+        return [movement.moveUp(), movement.moveDown(), movement.moveLeft(), movement.moveRight()]
 
     elif tile == 5:
         return [movement.moveUp(), movement.moveDown(), movement.moveLeft()]
@@ -211,21 +212,19 @@ def get_child(node):
         return [movement.moveUp(), movement.moveLeft()]
     
 
-    
-
 
 
 
 def outputanswer(path, nodes_Expanded, node, max_Depth, diff, ram):
     file = open("output_mine.txt", "w")
     
-    file.write("path_to_goal: "+ str(path)+"\n")
-    file.write("cost_of_path: "+ str(len(path))+"\n")
-    file.write("nodes_expanded: "+ str(nodes_Expanded)+"\n")
-    file.write("search_depth: "+ str(node.depth)+"\n")
-    file.write("max_search_depth: "+ str(max_Depth)+"\n")
-    file.write("running_time: "+ str(diff)+"\n")
-    file.write("max_ram_usage:" + str(ram / (1024 * 1024)) + "\n")
+    file.write("path_to_goal: {} \n".format(str(path)))
+    file.write("cost_of_path: {} \n".format(str(len(path))))
+    file.write("nodes_expanded: {} \n".format(nodes_Expanded))
+    file.write("search_depth: {} \n".format((node.depth)))
+    file.write("max_search_depth: {} \n".format(str(max_Depth)))
+    file.write("running_time: {} \n".format((diff)))
+    file.write("max_ram_usage: {} \n".format(str(ram / (1024 * 1024))))
     
     file.close()
 
@@ -268,3 +267,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

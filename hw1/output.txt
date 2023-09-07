@@ -3,5 +3,5 @@ cost_of_path: 3
 nodes_expanded: 10
 search_depth: 3
 max_search_depth: 4
-running_time: 0.00010776519775390625
-max_ram_usage:10.484375
+running_time: 0.0001499652862548828
+max_ram_usage:10.609375
