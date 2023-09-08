@@ -215,7 +215,54 @@ def bfs(board):
     outputanswer(path, counter, endNode, maxDepth, diff, ram)
     
 def dfs(board):
-    pass
+    begin = time.time()
+
+    explored = set()
+    counter = -1
+    maxDepth = 0 
+    root = Node(board, None, None, 0)
+    frontier_DFS.push(root)
+
+    endNode = None
+
+    while frontier_DFS.size() != 0:
+       
+        node = frontier_DFS.pop()
+        explored.add(str(node.state))
+        counter += 1
+
+        if node.state == target:
+            endNode = node
+
+            path = []
+            
+            start = node
+           
+            while node.parent != None:
+                
+                path.append(node.action)
+                node = node.parent
+            
+            path = path[::-1]
+        
+            break
+        else:
+            # get children
+            child = get_child(node)[::-1]
+
+            for v in child:
+
+                
+                if (str(v.state) not in explored) and (frontier_DFS.search(v) == False):
+                    if maxDepth < v.depth:
+                        maxDepth = v.depth
+                    frontier_DFS.enqueue(v)
+
+
+    end = time.time()
+    diff = end - begin
+    ram = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    outputanswer(path, counter, endNode, maxDepth, diff, ram)
 
 def astar(board):
 
