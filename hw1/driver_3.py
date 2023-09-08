@@ -159,6 +159,16 @@ Method
 '''
 
 def bfs(board):
+
+    """
+    Perform breadth-first search to find goal state.
+    
+    Parameters:
+        board (Node): The initial board node state
+    
+    Returns:
+        None
+    """
     begin = time.time()
 
     explored = set()
@@ -215,6 +225,15 @@ def bfs(board):
     outputanswer(path, counter, endNode, maxDepth, diff, ram)
     
 def dfs(board):
+    """
+    Perform depth-first search to find goal state.
+    
+    Parameters:
+        board (Node): The initial board node state
+    
+    Returns:
+        None
+    """
     begin = time.time()
 
     explored = set()
@@ -350,6 +369,8 @@ def main():
     elif search_algo == 'dfs':
         print('dfs is activated')
         dfs(input_state)
+    else:
+        print("wrong mode")
 
         
     print("check the txt file for the output")
