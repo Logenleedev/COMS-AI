@@ -4,6 +4,8 @@ import time
 import resource
 from collections import deque
 
+
+
 '''
 class
 ----------------------------------------------------------------
@@ -86,13 +88,15 @@ class Frontier:
     """
     
     def __init__(self):
+        # variables for DFS and BFS
         self.myque = deque()
         self.visited = set()
 
-    # Method definitions
-    def __init__(self):
-        self.myque = deque()
-        self.visited = set()
+        # variables for astar
+        self.pri_que = []
+        self.visited_pri = set()
+
+
 
     def pop(self):
         node = self.myque.pop()
@@ -110,6 +114,7 @@ class Frontier:
     
     def dequeue(self):
         node = self.myque.popleft()
+
         self.visited.discard(str(node.state))
         return(node)
 
@@ -123,7 +128,28 @@ class Frontier:
     
     def size(self):
         return len(self.visited)
+
+    # functions for asatr
+    def astar_insert(self, node):
+        hq.heappush(self.pri_que, (node.path_cost, node))
+        self.visited_pri.add(str(node.state))
     
+ 
+    def astar_pop(self):
+        
+        node = hq.heappop(self.pri_que)[1]
+
+        self.visited_pri.discard(str(node.state))
+        return node
+    
+    def astar_search(self, node):
+        flag = False
+        if str(node.state) in self.visited_pri:
+            flag = True
+        return flag
+    
+    def astar_size(self):
+        return len(self.pri_que)
     
 
 class Node:
@@ -142,6 +168,9 @@ class Node:
         self.parent = parent
         self.action = action
         self.depth = depth
+
+    def __lt__(self, node):
+          return self.path_cost < node.path_cost
 '''
 variables
 ----------------------------------------------------------------
@@ -151,7 +180,7 @@ variables
 target = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 frontier_BFS = Frontier()
 frontier_DFS = Frontier()
-
+frontier_Astar = Frontier()
 
 '''
 Method
@@ -283,10 +312,109 @@ def dfs(board):
     ram = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     outputanswer(path, counter, endNode, maxDepth, diff, ram)
 
+
+
 def astar(board):
+    """
+    Perform depth-first search to find goal state.
+    
+    Parameters:
+        board (Node): The initial board node state
+    
+    Returns:
+        None
+    """
+    begin = time.time()
+
+    explored = set()
+    counter = -1
+    maxDepth = 0 
+    root = Node(board, None, None, 0)
+    frontier_Astar.astar_insert(root)
+
+    endNode = None
+
+    while frontier_Astar.astar_size() != 0:
+
+        node = frontier_Astar.astar_pop()
+        explored.add(str(node.state))
+        counter += 1
+
+        if node.state == target:
+            endNode = node
+
+            path = []
+            
+            start = node
+           
+            while node.parent != None:
+                
+                path.append(node.action)
+                node = node.parent
+            
+            path = path[::-1]
+            
+            break
+        else:
+            # get children
+            child = get_child(node)[::-1]
+
+            for v in child:
+                # get h(x)
+                leaf = v
+
+                temp = []
+                
+                start = v
+                
+                while leaf.parent != None:
+
+                    temp.append(leaf.action)
+                    leaf = leaf.parent
+ 
+                v.path_cost = manhattan_distance(v) + len(temp)
+                
+                if (str(v.state) not in explored) and (frontier_Astar.astar_search(v) == False):
+                    if maxDepth < v.depth:
+                        maxDepth = v.depth
+              
+                    frontier_Astar.astar_insert(v)
+                else:
+                    for i in range(len(frontier_Astar.pri_que)):
+                        cur = frontier_Astar.pri_que[i]
+                        if(cur[1]==v and cur[0] > v.cost):
+                            frontier_Astar.pri_que[i]=(v.cost, v)
+                            hq.heapify(frontier_Astar.pri_que)
+
+
+
+    end = time.time()
+    diff = end - begin
+    ram = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    outputanswer(path, counter, endNode, maxDepth, diff, ram)
+  
 
     pass
 
+def manhattan_distance(board):
+    dist = 0
+    board = board.state
+    for tile in range(len(board)):
+    
+        # Determines target x and y for current tile
+        x_target = tile // 3  
+        y_target = tile % 3
+
+        # Gets index and calculates current x and y of tile
+        index = board.index(tile)
+        x_current = index // 3
+        y_current = index % 3
+
+        # Adds absolute distance between target and current x and y
+        dist += abs(x_target - x_current) + abs(y_target - y_current)
+
+    return dist  # Returns total Manhattan distance
+    
 def get_child(node):
     tile = node.state[:].index(0)
     

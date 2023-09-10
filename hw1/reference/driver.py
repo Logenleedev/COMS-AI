@@ -7,7 +7,7 @@
 
 # In[503]:
 
-
+import numpy as np
 from collections import deque
 import time 
 import resource
@@ -20,6 +20,15 @@ import sys
 goal = [0,1,2,3,4,5,6,7,8]
 
 
+# In[482]:
+
+def toMat(boards): #visually present the board
+    boards = np.array(boards)
+    if(len(boards)!=9):
+        for board in boards:
+            print(np.reshape(board,(3,3)))
+    else:
+        print(np.reshape(boards,(3,3)))
 
 
 # In[483]:
@@ -87,6 +96,14 @@ def getChildren(node): #Up Down Left Right
 
     return(output)
 
+
+# In[485]:
+
+def checkState(board): #print parent and child boards
+    print("Parent board is (current state):")
+    toMat(board)
+    print("Children boards are:")
+    toMat(getChildren(board))
 
 
 # In[486]:
@@ -190,8 +207,6 @@ def solverBFS(board):
         else:
             children = getChildren(node)
             for child in children:
-   
-
                 if (ExploredBFS.search(child)==False and FrontierBFS.search(child)==False):
                     FrontierBFS.enqueue(child)
 
