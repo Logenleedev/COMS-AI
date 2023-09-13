@@ -382,10 +382,9 @@ def astar(board):
                 else:
                     for i in range(len(frontier_Astar.pri_que)):
                         cur = frontier_Astar.pri_que[i]
-                        if(cur[1]==v and cur[0] > v.cost):
+                        if(cur[1] == v and cur[0] > v.cost):
                             frontier_Astar.pri_que[i]=(v.cost, v)
                             hq.heapify(frontier_Astar.pri_que)
-
 
 
     end = time.time()
