@@ -475,7 +475,7 @@ def main():
     # python3 driver_3.py ast 3,1,2,0,4,5,6,7,8
 
 
-    search_algo = str(sys.argv[1])
+    search_algo = str(sys.argv[1]).lower()
     input_state = sys.argv[2].split(",")
 
     # convert input state to int list e.g. [3,1,2,0,4,5,6,7,8]
@@ -485,19 +485,19 @@ def main():
 
     # mode activation
     if search_algo == 'bfs':
-        print('bfs is activated')
+        # print('bfs is activated')
         bfs(input_state)
 
 
     elif search_algo == 'ast':
-        print('A star is activated')
+        # print('A star is activated')
         astar(input_state)
 
     elif search_algo == 'dfs':
-        print('dfs is activated')
+        # print('dfs is activated')
         dfs(input_state)
-    else:
-        print("wrong mode")
+    # else:
+        # print("wrong mode")
 
         
     print("check the txt file for the output")

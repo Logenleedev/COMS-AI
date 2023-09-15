@@ -1,2 +1,0 @@
-1. search order issue 
-2. should we inverse the child in dfs
