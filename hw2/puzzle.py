@@ -7,7 +7,7 @@ sudokuAssign = None
 sudokuDomain = None
 constrainList = None
 sudokuConstraint = None
-
+domain = [1,2,3,4,5,6,7,8,9]
 
 
 
@@ -50,7 +50,7 @@ def createSudokuCsp():
     global sudokuConstraint
     
  
-    domain = [1,2,3,4,5,6,7,8,9]
+    
     
     sudokuBoard = [['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9'],
                    ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9'],
@@ -62,15 +62,25 @@ def createSudokuCsp():
                    ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9'],
                    ['I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9']]
  
-    sudokuDomain = {key:list(domain) for row in sudokuBoard for key in row}
+
+    sudokuDomain = {}
+
+    for row in sudokuBoard:
+        for key in row:
+            sudokuDomain[key] = list(domain)
     
-    sudokuAssign = {key:0 for key in sudokuDomain}
+    # sudokuAssign = {key:0 for key in sudokuDomain}
+
+    sudokuAssign = {}
+    for key in sudokuDomain:
+        sudokuAssign[key] = 0
 
 
+   
     constraintList = []
     
     for row in sudokuBoard:       
-        constraintList = constraintList + list(permutations(row,2))
+        constraintList += list(permutations(row,2))
 
     Transpose = list(map(list, zip(*sudokuBoard)))  #Transpose the
     
@@ -78,6 +88,7 @@ def createSudokuCsp():
         constraintList += list(permutations(col, 2))
         
     #Constraints within each 3x3 square
+    
     for row in [0,3,6]:
         for col in [0,3,6]:
             box = []
@@ -90,12 +101,18 @@ def createSudokuCsp():
 
     constraintList = list(set(constraintList))
     
-    sudokuConstraint = {key:list([]) for key in sudokuDomain} 
+   
+    sudokuConstraint = {}
+    for key in sudokuDomain:
+        sudokuConstraint[key] = []
+
+    
 
     for val in constraintList:
-        sudokuConstraint[val[0]].append(val) 
+        xi = val[0]
+        sudokuConstraint[xi].append(val) 
     
-    # print(constraintList)
+  
     return sudokuAssign, sudokuDomain, constraintList
 
 def main(sudokuStrStart):
@@ -127,7 +144,7 @@ def main(sudokuStrStart):
 
 
     a , b, c= AC3(sudukuAssignCopy, sudukuDomainCopy,  constrainListCopy)
-    print(c)
+    # print(b)
    
 if __name__ == "__main__":
     #Input sudoku string
