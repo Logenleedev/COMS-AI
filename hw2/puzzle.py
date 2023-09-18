@@ -10,7 +10,7 @@ sudokuConstraint = None
 domain = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 word = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 number = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
-MRV = 100000
+
 
 
 
@@ -52,7 +52,7 @@ def AC3(sudokuAssign, sudokuDomain, constraintList):
 def createSudokuCsp():
     global sudokuConstraint
     
- 
+    
     
     
     sudokuBoard = [['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9'],
@@ -118,33 +118,72 @@ def createSudokuCsp():
   
     return sudokuAssign, sudokuDomain, constraintList
 
-# backtracking search function 
-def backtracking(X, D):
-    global MRV
-    if all(value > 0 for key, value in X.items()):
-    
-        return (True, X, D)
+# backtracking search function
+# -------------------------------- 
 
-    # select assign variable
-    choose = ''
-    # MRV method 
-    for i in word:
-        for j in number:
-            coordinate = i + j
-            if X[i + j] == 0:
-                value = D[coordinate]
+
+def consistent(sudokuAssign, sudokuDomain, chosenKey, value):
+    global sudokuConstraint
+    
+    constraintList = sudokuConstraint[chosenKey]
+    for xi, xj in constraintList:
+        if value == xj:
+            return False 
+    return True
+
+def inference(X, D, chosenKey, value):
+    
+
+    global sudokuConstraint
+    
+    constraintList = sudokuConstraint[chosenKey]
+    for xi, xj in constraintList:
+        check = xj
+        if X[check] == 0: 
+            if value in D[check]:
+                D[check].remove(value)
+            else:
+                if D[check] == []: 
+                    return (False, X, D)
+    return (True, X, D)
+    
+def backtracking(X, D):  
+
+    flag = True
+    
+    for key, value in X.items():
+        if value == 0:
+            flag = False
+
+    if flag:
+        return (flag, X, D)
+
+    chosenKey = None
+    MRV = 10000
+    for row in word:
+        for col in number:
+            if X[row+col] == 0: #Consider only unassigned variables
+                value = D[row+col]
                 if len(value) < MRV:
-                    MRV = len(value)
-                    choose = coordinate
+                    MRV = min(MRV, len(value))
+                    chosenKey = row+col 
 
-    for value in X[choose]:
+    for value in D[chosenKey]:
+        if consistent(X, D, chosenKey, value):
+            X_New = deepcopy(X)
+            D_New = deepcopy(D)
+            X_New[chosenKey] = value
+            D_New[chosenKey] = [value]
 
-
-
-        
+            a, b, c= inference(X_New, D_New, chosenKey, value)
+            if a == True:
+                resultBTS = backtracking(b,c)
+                if resultBTS[0] == True:
+                    return resultBTS
+    return (False, X, D)
 
     
-
+# -------------------------------- 
 
 
 
@@ -195,9 +234,9 @@ def main(sudokuStrStart):
             flag = False
 
     if not flag:
-        print(sudokuAssign)
-        backtracking(deepcopy(sudokuAssign), deepcopy(sudokuDomain))
-   
+      
+        a, b, c = backtracking(deepcopy(sudokuAssign), deepcopy(sudokuDomain))
+        print(b)
 
 
    
