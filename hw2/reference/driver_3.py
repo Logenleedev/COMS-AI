@@ -32,6 +32,7 @@ def createSudokuCsp():
         constraintList = constraintList + list(itertools.permutations(row,2))
     #Constraints along column
     sudokuBoardT = list(map(list,zip(*sudokuBoard))) #Transpose the sudoku board 
+    
     for col in sudokuBoardT:       
         constraintList = constraintList + list(itertools.permutations(col,2))
     #Constraints within each 3x3 square
@@ -45,9 +46,10 @@ def createSudokuCsp():
     sudokuConstraint = {key:list([]) for key in sudokuDomain} 
     #Associate the constraints with their respective keys in a dictionary
     for val in constraintList:
-        sudokuConstraint[val[0]].append(val) 
+        sudokuConstraint[val[0]].append(val)
 
-    print(constraintList)
+
+
     return sudokuAssign, sudokuDomain, constraintList
 
 def selectUnassignedVariable(sudokuAssign,sudokuDomain):
@@ -159,7 +161,7 @@ def visualizeBoard(sudokuAssign):
                 s += ("%3c" % ' ') + "|"
         s += "\n" + line
     
-    print(s)
+    # print(s)
            
 def main(sudokuStrStart):
     #Initialize sudoku assignments, domain, and constraints
@@ -174,12 +176,16 @@ def main(sudokuStrStart):
             sudokuAssign[key] = int(sudokuStrStart[index])
             if int(sudokuStrStart[index]) != 0:
                 sudokuDomain[key] = [int(sudokuStrStart[index])]
-
+    
     print('Starting sudoku board')
     visualizeBoard(sudokuAssign)
 
     #Run AC3 algorithm first.             
     flag, sudokuAssignNew, sudokuDomainNew = AC3(copy.deepcopy(sudokuAssign),copy.deepcopy(sudokuDomain), copy.deepcopy(constraintList))
+
+    # print(flag)
+    # print(sudokuAssignNew)
+    print(sudokuDomainNew)
     algoName = 'AC3'
     #If the assignment is consistent after AC3, copy the assigned values into respective variables 
     if flag == True:
