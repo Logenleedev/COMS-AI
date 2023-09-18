@@ -88,7 +88,7 @@ def createSudokuCsp():
         constraintList += list(permutations(col, 2))
         
     #Constraints within each 3x3 square
-    
+
     for row in [0,3,6]:
         for col in [0,3,6]:
             box = []
@@ -143,8 +143,24 @@ def main(sudokuStrStart):
  
 
 
-    a , b, c= AC3(sudukuAssignCopy, sudukuDomainCopy,  constrainListCopy)
-    # print(b)
+    ref , new_assign, new_domain= AC3(sudukuAssignCopy, sudukuDomainCopy,  constrainListCopy)
+    algo_name_1 = 'AC3'
+    algo_name_2 = 'BTS'
+
+    if ref:
+        sudokuAssign = new_assign
+        sudokuDomain = new_domain
+
+    flag = True
+    
+    # if flag is False, then use BTS
+    for key, value in sudokuAssign.items():
+        if value == 0:
+            flag = False
+
+   
+
+
    
 if __name__ == "__main__":
     #Input sudoku string
