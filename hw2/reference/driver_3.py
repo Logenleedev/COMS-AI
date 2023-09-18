@@ -92,7 +92,8 @@ def backtracksearch(sudokuAssign,sudokuDomain):
     #Check if assignment is complete
     if all(value>0 for key,value in sudokuAssign.items()):
         return (True, sudokuAssign, sudokuDomain)
-    chosenKey = selectUnassignedVariable(sudokuAssign,sudokuDomain)
+    chosenKey = selectUnassignedVariable(sudokuAssign, sudokuDomain)
+    # print(chosenKey)
     for value in sudokuDomain[chosenKey]:
         if consistent(sudokuAssign, sudokuDomain, chosenKey, value):
             sudokuAssignNew = copy.deepcopy(sudokuAssign)
@@ -185,12 +186,14 @@ def main(sudokuStrStart):
 
     # print(flag)
     # print(sudokuAssignNew)
-    print(sudokuDomainNew)
+    # print(sudokuDomainNew)
     algoName = 'AC3'
     #If the assignment is consistent after AC3, copy the assigned values into respective variables 
     if flag == True:
         sudokuAssign = sudokuAssignNew
         sudokuDomain = sudokuDomainNew
+
+
     if all(value>0 for key,value in sudokuAssignNew.items()):
         pass #All variables have been successfully assigned by AC3 algorithm 
     else: #If AC3 fails, use the reduced domain space and BTS to solve the puzzle

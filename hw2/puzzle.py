@@ -7,7 +7,10 @@ sudokuAssign = None
 sudokuDomain = None
 constrainList = None
 sudokuConstraint = None
-domain = [1,2,3,4,5,6,7,8,9]
+domain = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+word = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+number = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+MRV = 100000
 
 
 
@@ -115,6 +118,38 @@ def createSudokuCsp():
   
     return sudokuAssign, sudokuDomain, constraintList
 
+# backtracking search function 
+def backtracking(X, D):
+    global MRV
+    if all(value > 0 for key, value in X.items()):
+    
+        return (True, X, D)
+
+    # select assign variable
+    choose = ''
+    # MRV method 
+    for i in word:
+        for j in number:
+            coordinate = i + j
+            if X[i + j] == 0:
+                value = D[coordinate]
+                if len(value) < MRV:
+                    MRV = len(value)
+                    choose = coordinate
+
+    for value in X[choose]:
+
+
+
+        
+
+    
+
+
+
+
+
+
 def main(sudokuStrStart):
     temp = createSudokuCsp()
     sudokuAssign = temp[0]
@@ -152,12 +187,16 @@ def main(sudokuStrStart):
         sudokuDomain = new_domain
 
     flag = True
+
     
     # if flag is False, then use BTS
-    for key, value in sudokuAssign.items():
+    for key, value in new_assign.items():
         if value == 0:
             flag = False
 
+    if not flag:
+        print(sudokuAssign)
+        backtracking(deepcopy(sudokuAssign), deepcopy(sudokuDomain))
    
 
 
