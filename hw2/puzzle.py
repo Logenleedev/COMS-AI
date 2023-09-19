@@ -33,7 +33,7 @@ def AC3(sudokuAssign, sudokuDomain, constraintList):
                 flag = True
 
         if flag:
-            if not sudokuDomain[Xi]:
+            if sudokuDomain[Xi] == []:
                 return (False, sudokuAssign, sudokuDomain)
                 
             neighbours = [Xk for Xi, Xk in sudokuConstraint[Xi]]
@@ -162,11 +162,12 @@ def backtracking(X, D):
     MRV = 10000
     for row in word:
         for col in number:
-            if X[row+col] == 0: #Consider only unassigned variables
-                value = D[row+col]
+            hash_key = row + col
+            if X[hash_key] == 0: #Consider only unassigned variables
+                value = D[hash_key]
                 if len(value) < MRV:
                     MRV = min(MRV, len(value))
-                    chosenKey = row+col 
+                    chosenKey = hash_key 
 
     for value in D[chosenKey]:
         if consistent(X, D, chosenKey, value):
@@ -219,7 +220,7 @@ def main(sudokuStrStart):
 
     ref , new_assign, new_domain= AC3(sudukuAssignCopy, sudukuDomainCopy,  constrainListCopy)
     algo_name_1 = 'AC3'
-    algo_name_2 = 'BTS'
+ 
 
     if ref:
         sudokuAssign = new_assign
@@ -236,8 +237,22 @@ def main(sudokuStrStart):
     if not flag:
       
         a, b, c = backtracking(deepcopy(sudokuAssign), deepcopy(sudokuDomain))
-        print(b)
 
+        algo_name_1 = "BTS"
+
+        finish_state = ''
+
+        for i in letter_head:
+            for j in number_head:
+                hash = i + j
+                finish_state += str(b[hash])
+        finish_state += " " + algo_name_1
+
+        # write file
+        file = open("output.txt", "w")
+    
+        file.write(finish_state)
+        file.close()
 
    
 if __name__ == "__main__":
