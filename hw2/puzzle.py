@@ -2,6 +2,7 @@ import sys
 from itertools import permutations
 from copy import deepcopy
 from queue import *
+import numpy as np
 
 sudokuAssign = None
 sudokuDomain = None
@@ -21,7 +22,7 @@ def AC3(sudokuAssign, sudokuDomain, constraintList):
     for c in constraintList:
         q.put(c)
 
-    while not q.empty():
+    while q.empty() == False:
         temp = q.get()
         Xi = temp[0]
         Xj = temp[1]
@@ -85,8 +86,9 @@ def createSudokuCsp():
     for row in sudokuBoard:       
         constraintList += list(permutations(row,2))
 
-    Transpose = list(map(list, zip(*sudokuBoard)))  #Transpose the
     
+    Transpose = np.array(sudokuBoard).T.tolist() # use numpy array to transpose list 
+
     for col in Transpose:       
         constraintList += list(permutations(col, 2))
         
@@ -116,11 +118,7 @@ def createSudokuCsp():
         sudokuConstraint[xi].append(val) 
     
   
-    return sudokuAssign, sudokuDomain, constraintList
-
-# backtracking search function
-# -------------------------------- 
-
+    return (sudokuAssign, sudokuDomain, constraintList)
 
 def consistent(sudokuAssign, sudokuDomain, chosenKey, value):
     global sudokuConstraint
@@ -184,7 +182,7 @@ def backtracking(X, D):
     return (False, X, D)
 
     
-# -------------------------------- 
+
 
 
 
