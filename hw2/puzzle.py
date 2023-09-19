@@ -28,10 +28,19 @@ def AC3(sudokuAssign, sudokuDomain, constraintList):
         Xj = temp[1]
         
         flag = False
-        for x in sudokuDomain[Xi]:
-            if not any(y != x for y in sudokuDomain[Xj]):
-                sudokuDomain[Xi].remove(x)
+
+        for value in sudokuDomain[Xi]:
+            all_match = True
+            
+            for other_value in sudokuDomain[Xj]:
+                if other_value != value:
+                    all_match = False
+                    break
+
+            if all_match:
+                sudokuDomain[Xi].remove(value)
                 flag = True
+
 
         if flag:
             if sudokuDomain[Xi] == []:
