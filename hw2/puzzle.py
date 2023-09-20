@@ -48,7 +48,6 @@ def AC3(sudokuAssign, sudokuDomain, constraintList):
                 
             neighbours = [Xk for Xi, Xk in sudokuConstraint[Xi]]
             for Xk in neighbours:
-
                 q.put((Xk,Xi))
 
     for key,value in sudokuDomain.items():
