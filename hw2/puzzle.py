@@ -16,6 +16,12 @@ number = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 
 
 def AC3(sudokuAssign, sudokuDomain, constraintList):
+    """ 
+    AC3 function to enforce arc consistency on the CSP
+    Parameters:sudokuAssign (dict): The variable assignmentssudokuDomain (dict): The domains of the variablesconstraintList (list): The constraints between variables
+
+    Returns:(bool, dict, dict): Tuple containing consistency check result, updated assignments, and updated domains
+    """
     global sudokuConstraint
     q = Queue()
 
@@ -59,6 +65,11 @@ def AC3(sudokuAssign, sudokuDomain, constraintList):
     
     
 def createSudokuCsp():
+
+    """ 
+    createSudokuCsp function to initialize the CSP for a sudoku puzzle
+    Returns:(sudokuAssign, sudokuDomain, constraintList) - Tuple containing the variable assignments, domains, and constraints
+    """
     global sudokuConstraint
     
     
@@ -81,7 +92,7 @@ def createSudokuCsp():
         for key in row:
             sudokuDomain[key] = list(domain)
     
-    # sudokuAssign = {key:0 for key in sudokuDomain}
+
 
     sudokuAssign = {}
     for key in sudokuDomain:
@@ -102,11 +113,13 @@ def createSudokuCsp():
         
     #Constraints within each 3x3 square
 
-    for row in [0,3,6]:
-        for col in [0,3,6]:
+    for row in range(9):
+        for col in range(9):
+            start_row = (row // 3) * 3
+            start_col = (col // 3) * 3
             box = []
-            for i in range(row, row+3):
-                for j in range(col, col+3):
+            for i in range(start_row, start_row+3):
+                for j in range(start_col, start_col+3):
                     val = sudokuBoard[i][j]
                     box.append(val)
 
@@ -138,7 +151,12 @@ def consistent(sudokuAssign, sudokuDomain, chosenKey, value):
     return True
 
 def inference(X, D, chosenKey, value):
-    
+    """ 
+    inference function to update domains after variable assignment
+    Parameters:X (dict): Variable assignmentsD (dict): Variable domainschosenKey (str): Assigned variablevalue (int): Assigned value
+
+    Returns:None
+    """
 
     global sudokuConstraint
     
@@ -154,7 +172,12 @@ def inference(X, D, chosenKey, value):
     return (True, X, D)
     
 def backtracking(X, D):  
+    """ 
+    backtracking function implements backtracking search to solve CSP
+    Parameters:X (dict): Variable assignmentsD (dict): Variable domains
 
+    Returns:(bool, dict, dict): Tuple containing result, updated assignments, and updated domains
+    """
     flag = True
     
     for key, value in X.items():
@@ -197,6 +220,12 @@ def backtracking(X, D):
 
 
 def main(sudokuStrStart):
+    """ 
+    main function is the entry point for the sudoku solver
+    Parameters:sudokuStrStart (str): The starting sudoku board configuration as a string
+
+    Returns:None
+    """
     temp = createSudokuCsp()
     sudokuAssign = temp[0]
     sudokuDomain = temp[1]
@@ -262,11 +291,20 @@ def main(sudokuStrStart):
 
    
 if __name__ == "__main__":
-    #Input sudoku string
-    start = sys.argv[1]
+    start = sys.argv[1].lower()
     main(start)
 
 
 
 
  
+
+
+
+
+
+
+
+
+
+

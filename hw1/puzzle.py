@@ -299,7 +299,6 @@ def dfs(board):
             child = get_child(node)[::-1]
 
             for v in child:
-
                 
                 if (str(v.state) not in explored) and (frontier_DFS.search(v) == False):
                     if maxDepth < v.depth:
