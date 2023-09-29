@@ -1,9 +1,11 @@
 import sys
 from itertools import permutations
+import time 
 from copy import deepcopy
 from queue import *
 import numpy as np
 
+running_time = []
 sudokuAssign = None
 sudokuDomain = None
 constrainList = None
@@ -268,33 +270,119 @@ def main(sudokuStrStart):
     for key, value in new_assign.items():
         if value == 0:
             flag = False
-
-    if not flag:
-      
-        a, b, c = backtracking(deepcopy(sudokuAssign), deepcopy(sudokuDomain))
-
-        algo_name_1 = "BTS"
-
-        finish_state = ''
-
-        for i in letter_head:
-            for j in number_head:
-                hash = i + j
-                finish_state += str(b[hash])
-        finish_state += " " + algo_name_1
-
-        # write file
-        file = open("output.txt", "w")
     
-        file.write(finish_state)
-        file.close()
+    if not flag:
+        ref , new_assign, new_domain = backtracking(deepcopy(sudokuAssign), deepcopy(sudokuDomain))
+
+    algo_name_1 = "BTS"
+
+    finish_state = ''
+
+    for i in letter_head:
+        for j in number_head:
+            hash = i + j
+            finish_state += str(new_assign[hash])
+
+
+    # write file
+    file = open("output.txt", "w")
+        
+    file.write(finish_state)
+    file.close()
 
    
 if __name__ == "__main__":
-    start = sys.argv[1].lower()
-    main(start)
+    if len(sys.argv) > 1:
+        start = sys.argv[1].lower()
+        main(start)
+    else:
+        # Running sudoku solver for boards in sudokus_start.txt $python3 sudoku.py
+
+        #  Read boards from source.
+        src_filename = 'sudokus_start.txt'
+        try:
+            srcfile = open(src_filename, "r")
+            sudoku_list = srcfile.read()
+        except:
+            print("Error reading the sudoku file %s" % src_filename)
+            exit()
+
+        # Setup output file
+        out_filename = 'output.txt'
+        outfile = open(out_filename, "w")
+
+        # Solve each board using backtracking
+        for line in sudoku_list.split("\n"):
+
+            if len(line) < 9:
+                continue
+
+                    
+            temp = createSudokuCsp()
+            sudokuAssign = temp[0]
+            sudokuDomain = temp[1]
+            constrainList = temp[2]
+
+        
+
+            begin = time.time()
+
+            index = -1
+            letter_head = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+            number_head = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+            for i in letter_head:
+                for j in number_head:
+                    hash = i + j
+                    index += 1
+                    sudokuAssign[hash] = int(line[index])
+                    if int(line[index]) != 0:
+                        sudokuDomain[hash] = [int(line[index])]
+            
+            sudukuAssignCopy = deepcopy(sudokuAssign)
+            sudukuDomainCopy = deepcopy(sudokuDomain)
+            constrainListCopy = deepcopy(constrainList)
 
 
+        
+
+
+            ref , new_assign, new_domain= AC3(sudukuAssignCopy, sudukuDomainCopy,  constrainListCopy)
+            algo_name_1 = 'AC3'
+        
+
+            if ref:
+                sudokuAssign = new_assign
+                sudokuDomain = new_domain
+
+            flag = True
+
+            
+            # if flag is False, then use BTS
+            for key, value in new_assign.items():
+                if value == 0:
+                    flag = False
+            
+            if not flag:
+                ref , new_assign, new_domain = backtracking(deepcopy(sudokuAssign), deepcopy(sudokuDomain))
+
+            algo_name_1 = "BTS"
+
+            finish_state = ''
+
+            for i in letter_head:
+                for j in number_head:
+                    hash = i + j
+                    finish_state += str(new_assign[hash])
+
+            end = time.time()
+            diff = end - begin
+            running_time.append(diff)
+                
+            outfile.write(finish_state)
+            outfile.write('\n')
+
+        print("Finishing all boards in file.")
+        print(running_time)
 
 
  

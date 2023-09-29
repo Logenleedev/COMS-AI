@@ -4,6 +4,7 @@ import time
 import numpy as np
 import itertools
 from random import randint
+from copy import deepcopy
 from BaseAI_3 import BaseAI
 from Grid_3 import Grid
 from Displayer_3  import Displayer
