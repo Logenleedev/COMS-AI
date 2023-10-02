@@ -347,7 +347,7 @@ if __name__ == "__main__":
 
 
             ref , new_assign, new_domain= AC3(sudukuAssignCopy, sudukuDomainCopy,  constrainListCopy)
-            algo_name_1 = 'AC3'
+          
         
 
             if ref:
@@ -365,7 +365,7 @@ if __name__ == "__main__":
             if not flag:
                 ref , new_assign, new_domain = backtracking(deepcopy(sudokuAssign), deepcopy(sudokuDomain))
 
-            algo_name_1 = "BTS"
+           
 
             finish_state = ''
 

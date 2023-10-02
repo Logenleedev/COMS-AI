@@ -152,5 +152,5 @@ class PlayerAI(BaseAI):
         playerAlarm = False
         playerPrevTime = time.process_time()
         grid.depth = 0
-        (child, _) = maxPlay(grid, -np.inf, np.inf)
-        return child
+        temp = maxPlay(grid, -np.inf, np.inf)
+        return temp[0]
