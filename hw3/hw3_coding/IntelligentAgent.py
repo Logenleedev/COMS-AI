@@ -1,13 +1,13 @@
 
 
 import numpy as np
-from BaseAI_3 import BaseAI
+from BaseAI import BaseAI
 import time
-from ComputerAI_3 import ComputerAI
+from ComputerAI import ComputerAI
 from random import randint
 import itertools
-from Grid_3 import Grid
-from Displayer_3  import Displayer
+from Grid import Grid
+from Displayer import Displayer
 from copy import deepcopy
 
 
@@ -20,8 +20,7 @@ total_Cell = 0
 MAXDEPTH = 4
 playerAlarm = False
 probability = 0.9
-
-   
+        
 def playerUpdateAlarm():
     global playerPrevTime
     global playerTimeLimit
@@ -150,10 +149,8 @@ def maxPlay(grid,alpha,beta):
 
     return (maxMove, maxUtility)
     
-class PlayerAI(BaseAI):        
-    def __init__(self):      
-        pass
-        
+class IntelligentAgent(BaseAI):        
+
     def getMove(self, grid):
         global playerTimeLimit
         global playerAlarm
@@ -164,5 +161,12 @@ class PlayerAI(BaseAI):
         playerPrevTime = time.process_time()
         grid.depth = 0
         temp = maxPlay(grid, -np.inf, np.inf)
-        print(temp[0])
+ 
         return temp[0]
+        
+        
+        
+        # # Selects a random move and returns it
+        # moveset = grid.getAvailableMoves()
+        # print(random.choice(moveset)[0])
+        # return random.choice(moveset)[0] if moveset else None

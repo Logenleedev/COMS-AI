@@ -1,0 +1,1005 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Copy Detection Report</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+  <style>
+    h1 {
+      text-align: center;
+    }
+    .highlight-green {
+      background-color: #b6f2b6;
+    }
+    .highlight-red {
+      background-color: #f2b6b6;
+    }
+    pre {
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+<div class="container" style="margin-top: 3em; max-width: 1400px">
+  <h1 style="margin-bottom: 1em;">Copy Detection Report</h1>
+  <h2>Overview</h2>
+    <div class="container d-flex justify-content-center">
+      <div class="col">
+        <h4 style="text-align: center;">Similarity Matrix</h4>
+        <img src="data:image/png;base64, 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" alt="Code similarity matrix">
+      </div>
+      <div class="col">
+        <h4 style="text-align: center;">Similarity Score Distribution</h4>
+        <img src="data:image/png;base64, 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fvazn8Wll14al19+eWzdujUiIm644Ya45557Yv369bFx48bYtWtXXHnlleMeHACAsakpiqIo90GnT58eH//4x+Otb31r/O3f/m3cfffd8da3vjUiIh5//PE466yzYtOmTXHhhRc+r+MNDg5Gc3NzDAwMRFNTU7nHPczcG++d8HNERDy1YlFFzgMAnFjG20ZlfQ3goUOHoru7O/bt2xft7e3R29sbBw8ejI6OjuF95s2bF3PmzIlNmzaV89QAADxPteU4yJYtW6K9vT32798fU6dOjW984xvxspe9LDZv3hx1dXUxbdq0Efu3tLREX1/fUY9XKpWiVCoNXx8cHCzHmAAARJmeAXzpS18amzdvjgcffDD+5V/+JZYsWRLbtm0b8/G6urqiubl5+NLW1laOMQEAiDIFYF1dXZx55pkxf/786OrqinPPPTf+/d//PVpbW+PAgQOxe/fuEfv39/dHa2vrUY+3bNmyGBgYGL7s3LmzHGMCABAT9DmAQ0NDUSqVYv78+TFlypTo6ekZvm379u3x9NNPR3t7+1HvX19fP/yxMn+6AABQHuN+DeCyZcvisssuizlz5sSePXvi7rvvjvvvvz/uu+++aG5ujmuuuSaWLl0a06dPj6amprjuuuuivb39eb8DGACA8hp3AD7zzDPxj//4j/Gb3/wmmpub45xzzon77rsv3vCGN0RExMqVK2PSpEmxePHiKJVKsXDhwrj99tvHPTgAAGMzIZ8DWG4+BxAA4P87pj4HEACAY58ABABIRgACACQjAAEAkhGAAADJCEAAgGQEIABAMgIQACAZAQgAkIwABABIRgACACQjAAEAkhGAAADJCEAAgGQEIABAMgIQACAZAQgAkIwABABIRgACACQjAAEAkhGAAADJCEAAgGQEIABAMgIQACAZAQgAkIwABABIRgACACQjAAEAkhGAAADJCEAAgGQEIABAMgIQACAZAQgAkIwABABIRgACACQjAAEAkhGAAADJCEAAgGQEIABAMgIQACAZAQgAkIwABABIRgACACQjAAEAkhGAAADJCEAAgGQEIABAMgIQACAZAQgAkIwABABIRgACACQjAAEAkhGAAADJCEAAgGQEIABAMgIQACAZAQgAkIwABABIRgACACQjAAEAkhGAAADJCEAAgGQEIABAMgIQACAZAQgAkIwABABIRgACACQjAAEAkhGAAADJCEAAgGQEIABAMgIQACAZAQgAkIwABABIRgACACQjAAEAkhGAAADJjDsAu7q64lWvelU0NjbGzJkz44orrojt27eP2Gf//v3R2dkZM2bMiKlTp8bixYujv79/vKcGAGAMxh2AGzdujM7OznjggQfi+9//fhw8eDDe+MY3xr59+4b3ueGGG+Kee+6J9evXx8aNG2PXrl1x5ZVXjvfUAACMQe14D7Bhw4YR1++6666YOXNm9Pb2xute97oYGBiItWvXxt133x2XXnppRESsW7cuzjrrrHjggQfiwgsvHO8IAACMQtlfAzgwMBAREdOnT4+IiN7e3jh48GB0dHQM7zNv3ryYM2dObNq0qdynBwDgrxj3M4B/bmhoKK6//vp49atfHWeffXZERPT19UVdXV1MmzZtxL4tLS3R19d3xOOUSqUolUrD1wcHB8s5JgBAamV9BrCzszMeffTR6O7uHtdxurq6orm5efjS1tZWpgkBAChbAF577bXxne98J37wgx/EqaeeOry9tbU1Dhw4ELt37x6xf39/f7S2th7xWMuWLYuBgYHhy86dO8s1JgBAeuMOwKIo4tprr41vfOMb8T//8z9x+umnj7h9/vz5MWXKlOjp6Rnetn379nj66aejvb39iMesr6+PpqamERcAAMpj3K8B7OzsjLvvvju+9a1vRWNj4/Dr+pqbm+MFL3hBNDc3xzXXXBNLly6N6dOnR1NTU1x33XXR3t7uHcAAAFUw7gC84447IiLikksuGbF93bp18e53vzsiIlauXBmTJk2KxYsXR6lUioULF8btt98+3lMDADAG4w7Aoij+6j4NDQ2xevXqWL169XhPBwDAOPlbwAAAyQhAAIBkBCAAQDICEAAgGQEIAJCMAAQASEYAAgAkIwABAJIRgAAAyQhAAIBkBCAAQDICEAAgGQEIAJCMAAQASEYAAgAkIwABAJIRgAAAyQhAAIBkBCAAQDICEAAgGQEIAJCMAAQASEYAAgAkIwABAJIRgAAAyQhAAIBkBCAAQDICEAAgGQEIAJCMAAQASEYAAgAkIwABAJIRgAAAyQhAAIBkBCAAQDICEAAgGQEIAJCMAAQASEYAAgAkIwABAJIRgAAAyQhAAIBkBCAAQDICEAAgGQEIAJCMAAQASEYAAgAkIwABAJIRgAAAyQhAAIBkBCAAQDICEAAgGQEI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EzXicaNifwoOslqxYkV0d3fH/ffff0K/YH20GhsbY/PmzbF3797o6emJpUuXxhlnnBGXXHJJtUermj179sS73vWuWLNmTZxyyinVHueY097eHu3t7cPXL7roojjrrLPis5/9bHz0ox+t4mTVNzQ0FDNnzozPfe5zMXny5Jg/f378+te/jo9//OOxfPnyao93zFi7dm284hWviAsuuKDao1RdqgA85ZRTYvLkydHf3z9ie39/f7S2th7xPq2traPa/3g1lrXJYjxrc9ttt8WKFSviv//7v+Occ86ZyDGrZqzrM2nSpDjzzDMjIuK8886Lxx57LLq6uk6oABzt2jz55JPx1FNPxZvf/ObhbUNDQxERUVtbG9u3b48XvehFEzt0hZTjZ86UKVPila98ZTzxxBMTMWLVjGVtZs2aFVOmTInJkycPbzvrrLOir68vDhw4EHV1dRM6c6WM53Gzb9++6O7ujo985CMTOeJxI9WvgOvq6mL+/PnR09MzvG1oaCh6enpG/Kvyz7W3t4/YPyLi+9///lH3P16NZW2yGOva3HrrrfHRj340NmzYEOeff34lRq2Kcj12hoaGolQqTcSIVTPatZk3b15s2bIlNm/ePHx5y1veEq9//etj8+bN0dbWVsnxJ1Q5HjeHDh2KLVu2xKxZsyZqzKoYy9q8+tWvjieeeGL4HwwRET//+c9j1qxZJ0z8RYzvcbN+/foolUrxzne+c6LHPD5U+10oldbd3V3U19cXd911V7Ft27bive99bzFt2rThjxJ417veVdx4443D+//4xz8uamtri9tuu6147LHHiuXLl5/QHwMzmrUplUrFI488UjzyyCPFrFmzive9733FI488UvziF7+o1pcwYUa7NitWrCjq6uqKr33tayM+fmDPnj3V+hIm1GjX52Mf+1jxve99r3jyySeLbdu2FbfddltRW1tbrFmzplpfwoQZ7do814n8LuDRrs3NN99c3HfffcWTTz5Z9Pb2FldddVXR0NBQbN26tVpfwoQZ7do8/fTTRWNjY3HttdcW27dvL77zne8UM2fOLG655ZZqfQkTZqzfU695zWuKt7/97ZUe95iVLgCLoig+/elPF3PmzCnq6uqKCy64oHjggQeGb7v44ouLJUuWjNj/q1/9avGSl7ykqKurK17+8pcX9957b4UnrpzRrM2OHTuKiDjscvHFF1d+8AoYzdqcdtppR1yb5cuXV37wChnN+nzwgx8szjzzzKKhoaE4+eSTi/b29qK7u7sKU1fGaH/m/LkTOQCLYnRrc/311w/v29LSUrzpTW8qHn744SpMXRmjfdz85Cc/KRYsWFDU19cXZ5xxRvFv//ZvxbPPPlvhqStjtGvz+OOPFxFRfO9736vwpMeumqIoiio9+QgAQBWkeg0gAAACEAAgHQEIAJCMAAQASEYAAgAkIwABAJIRgAAAyQhAAIBkBCAAQDICEAAgGQEIAJCMAAQASEYAAgAkIwABAJIRgAAAyQhAAIBkBCAAQDL/Cy0hknjA14gHAAAAAElFTkSuQmCC" alt="Code similarity histogram">
+      </div>
+    </div>
+    <p style="text-align: center">
+      <i>Note: a score of -1 in the similarity matrix indicates the comparison was skipped</i>
+    </p>
+    <p>
+    Number of files tested: 8<br>
+    Number of reference files: 8<br>
+    Test files above display threshold: 4 (50.00%)<br><br>
+    </p>
+
+  <h2>Matched Code</h2>
+  <table class="table table-striped table-sm">
+  <tbody class="table-light">
+  
+  <tr>
+  <td style="text-align: center;">
+  <p>
+    Test file: <i>hw3/BaseDisplayer_3.py</i> (<b>74.36%</b>)<br>
+    Reference file: <i>hw3/reference/PlayerAI_3.py</i> (<b>2.85%</b>)<br>
+    Token overlap: 29<br><br>
+    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-1" aria-expanded="false" aria-controls="collapse-1">
+      View matched code
+    </button>
+  </p>
+  <div class="collapse" id="collapse-1">
+    <div class="card card-body">
+      <div class="row">
+        <div class="col" style="max-width: 600px">
+          <pre><code>class BaseDisplayer<span class='highlight-red'>:
+    def __init__(self):
+        pass
+
+    def display(self, grid):
+        </span>pass
+</code></pre>
+        </div>
+        <div class="col" style="max-width: 600px">
+          <pre><code># -*- coding: utf-8 -*-
+
+import time
+import numpy as np
+import itertools
+from random import randint
+from BaseAI_3 import BaseAI
+from Grid_3 import Grid
+from Displayer_3  import Displayer
+from ComputerAI_3 import ComputerAI
+
+actionDic = {
+    0: &#34;UP&#34;,
+    1: &#34;DOWN&#34;,
+    2: &#34;LEFT&#34;,
+    3: &#34;RIGHT&#34;
+}
+
+playerAllowance = 0.02
+playerTimeLimit = 0.2 - playerAllowance # Time Limit before Losing
+playerPrevTime = 0
+playerAlarm = False
+tileValues = [2, 4]
+#tileValues = [2]
+probability = 0.9
+MAXDEPTH = 4
+        
+def playerUpdateAlarm():
+    global playerTimeLimit
+    global playerPrevTime
+    global playerAlarm
+    if (time.clock() - playerPrevTime) &gt;= playerTimeLimit:
+        playerAlarm = True
+    else: 
+        playerAlarm = False
+    return playerAlarm
+    
+def terminalTest(grid):
+    if grid.depth &gt;= MAXDEPTH or (not grid.canMove()):
+        return True
+    else:
+        return False
+
+def absSub(x,y):
+    return abs(x-y)        
+
+def evaluateUtility(grid):    
+    #Number of empty cells. Higher -&gt; better
+    totCell = len(grid.getAvailableCells())
+    h1 = totCell/(grid.size*grid.size)
+
+    #Smoothness of tiles. Lower -&gt; better
+    totDiff = 0
+    #Along each column
+    for i in range(grid.size - 1):
+        totDiff += sum(list(map(absSub, grid.map[i], grid.map[i+1])))
+    #Along each row 
+    for i in range(grid.size):    
+        totDiff += sum(list(map(absSub, grid.map[i][:-1], grid.map[i][1:])))
+
+    totCell = sum(itertools.chain.from_iterable(grid.map))
+    h2 = totDiff/(2 * totCell) 
+    
+#    for i in grid.map:
+#        print(i)
+#    print(&#34;h1= {:.4f}&#34;.format(h1))
+#    print(&#34;h2= {:.4f}&#34;.format(h2))
+#    print (&#34;h1 - h2 = {:.4f}&#34;.format(h1-h2))
+#    print(&#34; ----&gt; next option&#34;)
+
+    return h1 - h2    
+    
+def minPlay(grid,alpha,beta):
+    global playerTimeLimit
+    global playerPrevTime
+    global playerAlarm
+    #Terminal node test
+    if terminalTest(grid):
+        return (None, evaluateUtility(grid))
+        
+    #Reset minChild and minUtility
+    (_, minUtility) = (None, np.inf)
+    
+    #Check each child with empty cell filled iwth &#39;2&#39; or &#39;4&#39;
+    cells = grid.getAvailableCells()
+    
+    for cellValue in tileValues:
+        for cell in cells:
+            childGrid = grid.clone()
+            childGrid.depth = grid.depth + 1 #Increment the depth of node
+            childGrid.insertTile(cell,cellValue)
+            (_, utility) = maxPlay(childGrid, alpha, beta)
+            
+            if utility &lt; minUtility:
+                (minMove, minUtility) = (cell, utility)
+                
+            if minUtility &lt;= alpha:
+                break
+            
+            if minUtility &lt; beta:
+                beta = minUtility
+
+            if playerAlarm or playerUpdateAlarm():
+#                print(&#34;minPlay, Alarm={}, Time={:.6f}, Depth={}&#34;.format(playerAlarm,(time.clock() - playerPrevTime),grid.depth))
+                break
+            
+        if playerAlarm or playerUpdateAlarm():
+#            print(&#34;minPlay, Alarm={}, Time={:.6f}, Depth={}&#34;.format(playerAlarm,(time.clock() - playerPrevTime),grid.depth))
+            break
+                
+    return (minMove, minUtility)
+        
+def maxPlay(grid,alpha,beta):
+    global playerTimeLimit
+    global playerPrevTime
+    global playerAlarm
+    #Terminal node test
+    if terminalTest(grid):
+        return (None, evaluateUtility(grid))
+
+    #Reset maxChild and maxUtility
+    (_, maxUtility) = (None, -np.inf)
+    
+    #Check each child in the [UP, DOWN, LEFT, RIGHT] = [0, 1, 2, 3] direction
+    moves = grid.getAvailableMoves()
+    
+    for move in moves:
+        childGrid = grid.clone()
+        childGrid.depth = grid.depth + 1 #Increment the depth of node
+        childGrid.move(move)
+#        print(&#34;Option : {}&#34;.format(actionDic[move]))
+        (_, utility) = minPlay(childGrid, alpha, beta)
+        
+        if utility &gt; maxUtility:
+            (maxMove, maxUtility) = (move, utility)
+            
+        if maxUtility &gt;= beta:
+#            print(&#34;maxutility={:.3f} and beta={:.3f} and depth={}&#34;.format(maxUtility,beta,grid.depth))
+#            print(&#34;Pruned at {}&#34;.format(move))
+            break
+        
+        if maxUtility &gt; alpha:
+            alpha = maxUtility
+            
+        if playerAlarm or playerUpdateAlarm():
+#            print(&#34;maxPlay, Alarm={}, Time={:.6f}, Depth={}&#34;.format(playerAlarm,(time.clock() - playerPrevTime),grid.depth))
+            break
+          
+#    print(&#34;Returned alpha={:.3f} and beta={:.3f} and depth={}&#34;.format(alpha,beta,grid.depth))    
+    return (maxMove, maxUtility)
+    
+class PlayerAI(BaseAI)<span class='highlight-green'>:        
+    def __init__(self):      
+        pass
+        
+    def getMove(self, grid):
+        </span>global playerTimeLimit
+        global playerPrevTime
+        global playerAlarm
+        playerAlarm = False
+        playerPrevTime = time.clock() #Start timer
+#        print(&#34;Start time {:.4f}&#34;.format(playerPrevTime))
+        grid.depth = 0
+        (child, _) = maxPlay(grid, -np.inf, np.inf)
+#        print(&#34;Time lapsed {:.4f}&#34;.format(time.clock() - playerPrevTime))
+        return child
+
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  </td>
+  </tr>
+  
+  <tr>
+  <td style="text-align: center;">
+  <p>
+    Test file: <i>hw3/BaseDisplayer_3.py</i> (<b>74.36%</b>)<br>
+    Reference file: <i>hw3/PlayerAI_3.py</i> (<b>2.59%</b>)<br>
+    Token overlap: 29<br><br>
+    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
+      View matched code
+    </button>
+  </p>
+  <div class="collapse" id="collapse-2">
+    <div class="card card-body">
+      <div class="row">
+        <div class="col" style="max-width: 600px">
+          <pre><code>class BaseDisplayer<span class='highlight-red'>:
+    def __init__(self):
+        pass
+
+    def display(self, grid):
+        </span>pass
+</code></pre>
+        </div>
+        <div class="col" style="max-width: 600px">
+          <pre><code>
+
+import numpy as np
+from BaseAI_3 import BaseAI
+import time
+from ComputerAI_3 import ComputerAI
+from random import randint
+import itertools
+from Grid_3 import Grid
+from Displayer_3  import Displayer
+from copy import deepcopy
+
+
+
+playerAllowance = 0.02
+playerTimeLimit = 0.2 - playerAllowance # Time Limit before Losing
+playerPrevTime = 0
+totDiff = 0
+total_Cell = 0
+MAXDEPTH = 4
+playerAlarm = False
+probability = 0.9
+        
+def playerUpdateAlarm():
+    global playerPrevTime
+    global playerTimeLimit
+    global MAXDEPTH
+    global totDiff
+    global playerAlarm
+    difference = abs(time.process_time() - playerPrevTime)
+    if  difference &gt;= playerTimeLimit:
+        playerAlarm = True
+    else: 
+        playerAlarm = False
+    return playerAlarm
+    
+
+
+def evaluateUtility(grid):    
+    global playerPrevTime
+    global playerTimeLimit
+    global total_Cell
+    global totDiff
+    total_Cell = len(grid.getAvailableCells())
+    h1 = total_Cell / (grid.size*grid.size)
+
+    
+    
+
+    for i in range(grid.size - 1):
+        for j in range(len(grid.map[i])):
+            totDiff += abs(grid.map[i][j] - grid.map[i+1][j])
+
+    for i in range(grid.size):
+        for j in range(len(grid.map[i])-1):
+            totDiff += abs(grid.map[i][j] - grid.map[i][j + 1])
+
+   
+    for row in grid.map:
+        for cell in row:
+            total_Cell += cell
+
+    h2 = totDiff/(2 * total_Cell) 
+    
+
+
+    return h1 - h2    
+    
+def minPlay(grid,alpha,beta):
+    global playerTimeLimit
+    global playerPrevTime
+    global total_Cell
+    global totDiff
+    global playerAlarm
+   
+    if grid.depth &gt;= MAXDEPTH or (not grid.canMove()):
+        return (None, evaluateUtility(grid))
+        
+
+    minUtility = np.inf
+    _ = None
+    
+
+    
+    for value in [2, 4]:
+        for cell in grid.getAvailableCells():
+            childGrid = grid.clone()
+            update_depth = grid.depth + 1 
+            childGrid.depth = update_depth
+            childGrid.insertTile(cell,value)
+            temp = maxPlay(childGrid, alpha, beta)
+            utility = temp[1]
+
+            if utility &lt; minUtility:
+                a = cell
+                b = utility
+                (minMove, minUtility) = (a, b)
+                
+            if minUtility &lt;= alpha:
+                break
+            
+            if minUtility &lt; beta:
+                beta = min(minUtility, beta)
+
+            if playerAlarm == True or playerUpdateAlarm() == True:
+                break
+            
+        if playerAlarm == True or playerUpdateAlarm() == True:
+            break
+                
+    return (minMove, minUtility)
+        
+def maxPlay(grid,alpha,beta):
+    global playerPrevTime
+    global total_Cell
+    global playerTimeLimit
+    global playerAlarm
+    global totDiff
+
+    if grid.depth &gt;= MAXDEPTH or (not grid.canMove()):
+        return (None, evaluateUtility(grid))
+
+
+    temp = (None, -np.inf)
+    maxUtility = temp[1]
+    
+
+    
+    for move in grid.getAvailableMoves():
+        childGrid = grid.clone()
+        update_depth = grid.depth + 1 
+        childGrid.depth = update_depth
+        childGrid.move(move)
+        temp = minPlay(childGrid, alpha, beta)
+        utility = temp[1]
+        
+        if utility &gt; maxUtility:
+            (maxMove, maxUtility) = (move, utility)
+            
+        if maxUtility &gt;= beta:
+            break
+        
+        if maxUtility &gt; alpha:
+            alpha = max(maxUtility, alpha)
+            
+        if playerAlarm == True or playerUpdateAlarm() == True:
+            break
+          
+
+    return (maxMove, maxUtility)
+    
+class PlayerAI(BaseA<span class='highlight-green'>I):        
+    def __init__(self):      
+        pass
+        
+    def getMove(self, grid):
+      </span>  global playerTimeLimit
+        global playerAlarm
+        global total_Cell
+        global totDiff
+        global playerPrevTime
+        playerAlarm = False
+        playerPrevTime = time.process_time()
+        grid.depth = 0
+        temp = maxPlay(grid, -np.inf, np.inf)
+        return temp[0]</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  </td>
+  </tr>
+  
+  <tr>
+  <td style="text-align: center;">
+  <p>
+    Test file: <i>hw3/reference/PlayerAI_3.py</i> (<b>40.77%</b>)<br>
+    Reference file: <i>hw3/PlayerAI_3.py</i> (<b>38.34%</b>)<br>
+    Token overlap: 415<br><br>
+    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
+      View matched code
+    </button>
+  </p>
+  <div class="collapse" id="collapse-3">
+    <div class="card card-body">
+      <div class="row">
+        <div class="col" style="max-width: 600px">
+          <pre><code># -*- coding: utf-8 -*-
+
+import time
+import numpy as np
+import itertools
+from random import randint
+from BaseAI_3 import BaseAI
+<span class='highlight-red'>from Grid_3 import Grid
+from Displayer_3  import Displayer
+from </span>ComputerAI_3 import ComputerAI
+
+actionDic = {
+    0: &#34;UP&#34;,
+    1: &#34;DOWN&#34;,
+    2: &#34;LEFT&#34;,
+    3: &#34;RIGHT&#34;
+}
+
+playerAllowance = 0.02
+playerTimeLimit = 0.2 - playerAllowance # Time Limit before Losing
+playerPrevTime = 0
+playerAlarm = False
+tileValues = [2, 4]
+#tileValues = [2]
+probability = 0.9
+MAXDEPTH = 4
+        
+<span class='highlight-red'>def playerUpdateAlarm():
+    global playerTimeLimit
+    global playerPrevTime
+    global playerAlarm
+    </span>if (time.clock() - playerPrevTime) <span class='highlight-red'>&gt;= playerTimeLimit:
+        playerAlarm = True
+    else: 
+        playerAlarm = False
+    return playerAlarm
+    
+def terminalTest(grid):
+    </span><span class='highlight-red'>if grid.depth &gt;= MAXDEPTH or (not grid.canMove()):
+        return </span>True
+    else:
+        return False
+
+def absSub(x,y):
+    return abs(x-y)        
+
+def evaluateUtility(grid):    
+    #Number of empty cells. Higher -&gt; better
+    <span class='highlight-red'>totCell = len(grid.getAvailableCells())
+    h1 = totCell/(grid.size*grid.size)
+
+    #Smoothness of tiles. Lower -&gt; better
+    </span>totDiff = 0
+    #Along each column
+    for i in range(grid.size - 1):
+        totDiff += sum(list(map(absSub, grid.map[i], grid.map[i+1])))
+    #Along each row 
+    for i in range(grid.size):    
+        totDiff += sum(list(map(absSub, grid.map[i][:-1], grid.map[i][1:])))
+
+    totCell = sum(itertools.chain.from_iterable(grid.map))
+    <span class='highlight-red'>h2 = totDiff/(2 * totCell) 
+    
+#    for i in grid.map:
+#        print(i)
+#    print(&#34;h1= {:.4f}&#34;.format(h1))
+#    print(&#34;h2= {:.4f}&#34;.format(h2))
+#    print (&#34;h1 - h2 = {:.4f}&#34;.format(h1-h2))
+#    print(&#34; ----&gt; next option&#34;)
+
+    return h1 - h2    
+    
+def minPlay(grid,alpha,beta):
+    global playerTimeLimit
+    global playerPrevTime
+    global playerAlarm
+    #Terminal node test
+    </span>if terminalTest(grid):
+        return (None, evaluateUtility(grid))
+        
+    #Reset minChild and minUtility
+    (_, minUtility) = (None, np.inf)
+    
+    #Check each child with empty cell filled iwth &#39;2&#39; or &#39;4&#39;
+    cells = grid.getAvailableCells()
+    
+    for cellValue in tileValues:
+        for cell in cells:
+            childGrid = grid.clone()
+            childGrid.depth = grid.depth + 1 #Increment the depth of node
+            childGrid.insertTile(cell,cellValue)
+            (_, utility) = maxPlay(childGrid, alpha, beta)
+            
+            if utility &lt; minUtility:
+                <span class='highlight-red'>(minMove, minUtility) = (cell, utility)
+                
+            if minUtility &lt;= alpha:
+                break
+            
+            if minUtility &lt; beta:
+                beta = </span>minUtility
+
+            if playerAlarm or playerUpdateAlarm():
+#                print(&#34;minPlay, Alarm={}, Time={:.6f}, Depth={}&#34;.format(playerAlarm,(time.clock() - playerPrevTime),grid.depth))
+                break
+            
+        if playerAlarm or playerUpdateAlarm()<span class='highlight-red'>:
+#            print(&#34;minPlay, Alarm={}, Time={:.6f}, Depth={}&#34;.format(playerAlarm,(time.clock() - playerPrevTime),grid.depth))
+            break
+                
+    return (minMove, minUtility)
+        
+def maxPlay(grid,alpha,beta):
+    global playerTimeLimit
+    globa</span>l playerPrevTime
+    global playerAlarm
+    #Terminal node test
+    if terminalTest(grid):
+        return (None, evaluateUtility(grid))
+
+    #Reset maxChild and maxUtility
+    (_, maxUtility) = (None, -np.inf)
+    
+    #Check each child in the [UP, DOWN, LEFT, RIGHT] = [0, 1, 2, 3] direction
+    moves = grid.getAvailableMoves()
+    
+    for move in moves:
+        childGrid = grid.clone()
+        childGrid.depth = grid.depth + 1 #Increment the depth of node
+        childGrid.move(move)
+#        print(&#34;Option : {}&#34;.format(actionDic[move]))
+        (_, utility) = minPlay(childGrid, alpha, beta)
+        
+        <span class='highlight-red'>if utility &gt; maxUtility:
+            (maxMove, maxUtility) = (move, utility)
+            
+        if maxUtility &gt;= beta:
+#            print(&#34;maxutility={:.3f} and beta={:.3f} and depth={}&#34;.format(maxUtility,beta,grid.depth))
+#            print(&#34;Pruned at {}&#34;.format(move))
+            break
+        
+        if maxUtility &gt; alpha:
+            alpha = </span>maxUtility
+            
+        if playerAlarm or playerUpdateAlarm()<span class='highlight-red'>:
+#            print(&#34;maxPlay, Alarm={}, Time={:.6f}, Depth={}&#34;.format(playerAlarm,(time.clock() - playerPrevTime),grid.depth))
+            break
+          
+#    print(&#34;Returned alpha={:.3f} and beta={:.3f} and depth={}&#34;.format(alpha,beta,grid.depth))    
+    return (maxMove, maxUtility)
+    
+class PlayerAI(BaseAI):        
+    def __init__(self):      
+        pass
+        
+    def getMove(self, grid):
+        global playerTimeLimit
+        global playerPrevTime
+        global playerAlarm
+        playerAlarm = False
+        playerPrevTime = time.clock() #Start timer
+#        print(&#34;Start time {:.4f}&#34;.format(playerPrevTime))
+        grid.depth = 0
+        </span>(child, _) = maxPlay(grid, -np.inf, np.inf)
+#        print(&#34;Time lapsed {:.4f}&#34;.format(time.clock() - playerPrevTime))
+        return child
+
+</code></pre>
+        </div>
+        <div class="col" style="max-width: 600px">
+          <pre><code>
+
+import numpy as np
+from BaseAI_3 import BaseAI
+import time
+from ComputerAI_3 import ComputerAI
+from random import randint
+import itertool<span class='highlight-green'>s
+from Grid_3 import Grid
+from Displayer_3  import Displayer
+fro</span>m copy import deepcopy
+
+
+
+playerAllowance = 0.02
+playerTimeLimit = 0.2 - playerAllowance # Time Limit before Losing
+playerPrevTime = 0
+totDiff = 0
+total_Cell = 0
+MAXDEPTH = 4
+playerAlarm = False
+probability = 0.9
+       <span class='highlight-green'> 
+def playerUpdateAlarm():
+    global playerPrevTime
+    global playerTimeLimit
+    global MAXDEPTH
+  </span>  global totDiff
+    global playerAlarm
+    difference = abs(time.process_time() - playerPrevTime)
+    if  differenc<span class='highlight-green'>e &gt;= playerTimeLimit:
+        playerAlarm = True
+    else: 
+        playerAlarm = False
+    return playerAlarm
+    
+
+
+def evaluateUtility(grid):    
+  </span>  global playerPrevTime
+    global playerTimeLimit
+    global total_Cell
+    global totDiff
+  <span class='highlight-green'>  total_Cell = len(grid.getAvailableCells())
+    h1 = total_Cell / (grid.size*grid.size)
+
+    
+    
+
+  </span>  for i in range(grid.size - 1):
+        for j in range(len(grid.map[i])):
+            totDiff += abs(grid.map[i][j] - grid.map[i+1][j])
+
+    for i in range(grid.size):
+        for j in range(len(grid.map[i])-1):
+            totDiff += abs(grid.map[i][j] - grid.map[i][j + 1])
+
+   
+    for row in grid.map:
+        for cell in row:
+            total_Cell += cell
+
+  <span class='highlight-green'>  h2 = totDiff/(2 * total_Cell) 
+    
+
+
+    return h1 - h2    
+    
+def minPlay(grid,alpha,beta):
+    global playerTimeLimit
+    global playerPrevTime
+    global total_Cell
+  </span>  global totDiff
+    global playerAlarm
+   
+  <span class='highlight-green'>  if grid.depth &gt;= MAXDEPTH or (not grid.canMove()):
+        retur</span>n (None, evaluateUtility(grid))
+        
+
+    minUtility = np.inf
+    _ = None
+    
+
+    
+    for value in [2, 4]:
+        for cell in grid.getAvailableCells():
+            childGrid = grid.clone()
+            update_depth = grid.depth + 1 
+            childGrid.depth = update_depth
+            childGrid.insertTile(cell,value)
+            temp = maxPlay(childGrid, alpha, beta)
+            utility = temp[1]
+
+            if utility &lt; minUtility:
+                a = cell
+                b = utility
+              <span class='highlight-green'>  (minMove, minUtility) = (a, b)
+                
+            if minUtility &lt;= alpha:
+                break
+            
+            if minUtility &lt; beta:
+                beta </span>= min(minUtility, beta)
+
+            if playerAlarm == True or playerUpdateAlarm() == True:
+                break
+            
+        if playerAlarm == True or playerUpdateAlarm() == Tr<span class='highlight-green'>ue:
+            break
+                
+    return (minMove, minUtility)
+        
+def maxPlay(grid,alpha,beta):
+    global playerPrevTime
+    glo</span>bal total_Cell
+    global playerTimeLimit
+    global playerAlarm
+    global totDiff
+
+    if grid.depth &gt;= MAXDEPTH or (not grid.canMove()):
+        return (None, evaluateUtility(grid))
+
+
+    temp = (None, -np.inf)
+    maxUtility = temp[1]
+    
+
+    
+    for move in grid.getAvailableMoves():
+        childGrid = grid.clone()
+        update_depth = grid.depth + 1 
+        childGrid.depth = update_depth
+        childGrid.move(move)
+        temp = minPlay(childGrid, alpha, beta)
+        utility = temp[1]
+        
+      <span class='highlight-green'>  if utility &gt; maxUtility:
+            (maxMove, maxUtility) = (move, utility)
+            
+        if maxUtility &gt;= beta:
+            break
+        
+        if maxUtility &gt; alpha:
+            alpha </span>= max(maxUtility, alpha)
+            
+        if playerAlarm == True or playerUpdateAlarm() == Tr<span class='highlight-green'>ue:
+            break
+          
+
+    return (maxMove, maxUtility)
+    
+class PlayerAI(BaseAI):        
+    def __init__(self):      
+        pass
+        
+    def getMove(self, grid):
+        global playerTimeLimit
+        global playerAlarm
+        global total_Cell
+        global totDiff
+        global playerPrevTime
+        playerAlarm = False
+        playerPrevTime = time.process_time()
+        grid.depth = 0
+      </span>  temp = maxPlay(grid, -np.inf, np.inf)
+        return temp[0]</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  </td>
+  </tr>
+  
+  <tr>
+  <td style="text-align: center;">
+  <p>
+    Test file: <i>hw3/ComputerAI_3.py</i> (<b>36.36%</b>)<br>
+    Reference file: <i>hw3/reference/PlayerAI_3.py</i> (<b>3.54%</b>)<br>
+    Token overlap: 36<br><br>
+    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
+      View matched code
+    </button>
+  </p>
+  <div class="collapse" id="collapse-4">
+    <div class="card card-body">
+      <div class="row">
+        <div class="col" style="max-width: 600px">
+          <pre><code><span class='highlight-red'>from random import randint
+from BaseAI_3 import BaseAI
+
+</span>class ComputerAI(BaseAI):
+    def getMove(self, grid):
+        cells = grid.getAvailableCells()
+
+        return cells[randint(0, len(cells) - 1)] if cells else None
+</code></pre>
+        </div>
+        <div class="col" style="max-width: 600px">
+          <pre><code># -*- coding: utf-8 -*-
+
+import time
+import numpy as np
+import itertools
+<span class='highlight-green'>from random import randint
+from BaseAI_3 import BaseAI
+</span>from Grid_3 import Grid
+from Displayer_3  import Displayer
+from ComputerAI_3 import ComputerAI
+
+actionDic = {
+    0: &#34;UP&#34;,
+    1: &#34;DOWN&#34;,
+    2: &#34;LEFT&#34;,
+    3: &#34;RIGHT&#34;
+}
+
+playerAllowance = 0.02
+playerTimeLimit = 0.2 - playerAllowance # Time Limit before Losing
+playerPrevTime = 0
+playerAlarm = False
+tileValues = [2, 4]
+#tileValues = [2]
+probability = 0.9
+MAXDEPTH = 4
+        
+def playerUpdateAlarm():
+    global playerTimeLimit
+    global playerPrevTime
+    global playerAlarm
+    if (time.clock() - playerPrevTime) &gt;= playerTimeLimit:
+        playerAlarm = True
+    else: 
+        playerAlarm = False
+    return playerAlarm
+    
+def terminalTest(grid):
+    if grid.depth &gt;= MAXDEPTH or (not grid.canMove()):
+        return True
+    else:
+        return False
+
+def absSub(x,y):
+    return abs(x-y)        
+
+def evaluateUtility(grid):    
+    #Number of empty cells. Higher -&gt; better
+    totCell = len(grid.getAvailableCells())
+    h1 = totCell/(grid.size*grid.size)
+
+    #Smoothness of tiles. Lower -&gt; better
+    totDiff = 0
+    #Along each column
+    for i in range(grid.size - 1):
+        totDiff += sum(list(map(absSub, grid.map[i], grid.map[i+1])))
+    #Along each row 
+    for i in range(grid.size):    
+        totDiff += sum(list(map(absSub, grid.map[i][:-1], grid.map[i][1:])))
+
+    totCell = sum(itertools.chain.from_iterable(grid.map))
+    h2 = totDiff/(2 * totCell) 
+    
+#    for i in grid.map:
+#        print(i)
+#    print(&#34;h1= {:.4f}&#34;.format(h1))
+#    print(&#34;h2= {:.4f}&#34;.format(h2))
+#    print (&#34;h1 - h2 = {:.4f}&#34;.format(h1-h2))
+#    print(&#34; ----&gt; next option&#34;)
+
+    return h1 - h2    
+    
+def minPlay(grid,alpha,beta):
+    global playerTimeLimit
+    global playerPrevTime
+    global playerAlarm
+    #Terminal node test
+    if terminalTest(grid):
+        return (None, evaluateUtility(grid))
+        
+    #Reset minChild and minUtility
+    (_, minUtility) = (None, np.inf)
+    
+    #Check each child with empty cell filled iwth &#39;2&#39; or &#39;4&#39;
+    cells = grid.getAvailableCells()
+    
+    for cellValue in tileValues:
+        for cell in cells:
+            childGrid = grid.clone()
+            childGrid.depth = grid.depth + 1 #Increment the depth of node
+            childGrid.insertTile(cell,cellValue)
+            (_, utility) = maxPlay(childGrid, alpha, beta)
+            
+            if utility &lt; minUtility:
+                (minMove, minUtility) = (cell, utility)
+                
+            if minUtility &lt;= alpha:
+                break
+            
+            if minUtility &lt; beta:
+                beta = minUtility
+
+            if playerAlarm or playerUpdateAlarm():
+#                print(&#34;minPlay, Alarm={}, Time={:.6f}, Depth={}&#34;.format(playerAlarm,(time.clock() - playerPrevTime),grid.depth))
+                break
+            
+        if playerAlarm or playerUpdateAlarm():
+#            print(&#34;minPlay, Alarm={}, Time={:.6f}, Depth={}&#34;.format(playerAlarm,(time.clock() - playerPrevTime),grid.depth))
+            break
+                
+    return (minMove, minUtility)
+        
+def maxPlay(grid,alpha,beta):
+    global playerTimeLimit
+    global playerPrevTime
+    global playerAlarm
+    #Terminal node test
+    if terminalTest(grid):
+        return (None, evaluateUtility(grid))
+
+    #Reset maxChild and maxUtility
+    (_, maxUtility) = (None, -np.inf)
+    
+    #Check each child in the [UP, DOWN, LEFT, RIGHT] = [0, 1, 2, 3] direction
+    moves = grid.getAvailableMoves()
+    
+    for move in moves:
+        childGrid = grid.clone()
+        childGrid.depth = grid.depth + 1 #Increment the depth of node
+        childGrid.move(move)
+#        print(&#34;Option : {}&#34;.format(actionDic[move]))
+        (_, utility) = minPlay(childGrid, alpha, beta)
+        
+        if utility &gt; maxUtility:
+            (maxMove, maxUtility) = (move, utility)
+            
+        if maxUtility &gt;= beta:
+#            print(&#34;maxutility={:.3f} and beta={:.3f} and depth={}&#34;.format(maxUtility,beta,grid.depth))
+#            print(&#34;Pruned at {}&#34;.format(move))
+            break
+        
+        if maxUtility &gt; alpha:
+            alpha = maxUtility
+            
+        if playerAlarm or playerUpdateAlarm():
+#            print(&#34;maxPlay, Alarm={}, Time={:.6f}, Depth={}&#34;.format(playerAlarm,(time.clock() - playerPrevTime),grid.depth))
+            break
+          
+#    print(&#34;Returned alpha={:.3f} and beta={:.3f} and depth={}&#34;.format(alpha,beta,grid.depth))    
+    return (maxMove, maxUtility)
+    
+class PlayerAI(BaseAI):        
+    def __init__(self):      
+        pass
+        
+    def getMove(self, grid):
+        global playerTimeLimit
+        global playerPrevTime
+        global playerAlarm
+        playerAlarm = False
+        playerPrevTime = time.clock() #Start timer
+#        print(&#34;Start time {:.4f}&#34;.format(playerPrevTime))
+        grid.depth = 0
+        (child, _) = maxPlay(grid, -np.inf, np.inf)
+#        print(&#34;Time lapsed {:.4f}&#34;.format(time.clock() - playerPrevTime))
+        return child
+
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  </td>
+  </tr>
+  
+  </tbody>
+  </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
+</body>
