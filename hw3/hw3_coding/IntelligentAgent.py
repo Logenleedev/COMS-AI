@@ -1,4 +1,5 @@
-
+# Name: jiatong li 
+# Uni: jl6565
 
 import numpy as np
 from BaseAI import BaseAI
