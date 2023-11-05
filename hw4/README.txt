@@ -1,3 +1,8 @@
+Name: Jiatong Li 
+UNI: jl6565
+
+
+
 1. One-hot encoding is a technique used to represent categorical data, such as class labels or categories, in a numerical format that can be easily processed by machine learning algorithms. It is important because many machine learning models, including neural networks, require input data to be in numerical form. For example, if we have input labels ["tree", "cat", "dog"] and the ground truth is "cat", then we can encode the input to [0, 1, 0]. One-hot encoding is particularly useful when dealing with categorical variables that do not have a natural ordinal relationship between their categories.
 2. During training, for each mini-batch of data, dropout randomly deactivates (or "drops out") a fraction of neurons in the neural network. The fraction of neurons to drop out is a hyperparameter typically set between 0.2 and 0.5, but it can vary depending on the specific problem. The key idea behind dropout is that it forces the neural network to be more robust and prevents it from relying too heavily on any specific set of neurons.
 3. For sigmoid, It outputs values between 0 and 1, mapping any real-valued number to a value within this range. This property makes it suitable for binary classification problems where you need a probability-like output. For RELU, It outputs 0 for any negative input and passes through any positive input unchanged. 
@@ -41,3 +46,8 @@ Output height = 96 / 2 = 48
 
 
 
+Architecture choice:
+The implementation is kind of intuitive. I sandwich convolution layer and max pool layer alternatively. 
+I treat the collection of these two as the foundemental building block. We know that the y label has 25 unique value so 
+we must set the last softmax layer to 25 units. After doing a bit research, I decided to add dropout layer in the middle to prevent 
+overfitting. The result turns to be pretty good and I successfully achieve 90+ accuracy. 
