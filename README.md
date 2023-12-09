@@ -6,3 +6,7 @@
   - solving 2048 using minimax and alpha-beta pruning
 - hw4 
   - MINIST dataset with CNN 
+
+
+All assignments receive the highest grade in the class.
+
